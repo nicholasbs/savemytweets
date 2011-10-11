@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+# A sample Gemfile
+source "http://rubygems.org"
 
-gem 'twitter'
-gem 'mongo'
+gemspec
