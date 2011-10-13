@@ -81,11 +81,8 @@ module SaveMyTweets
       @coll.insert(tweets) # save the tweets
 
       # Save the id of the newest tweet we've saved
-      if @options[:since_id]
-        @coll.update({:newest_tweet_id => @options[:since_id]}, {:newest_tweet_id => newest_tweet_id})
-      else
-        @coll.insert('newest_tweet_id' => newest_tweet_id)
-      end
+      @coll.update({:newest_tweet_id => @options[:since_id]},
+                   {:newest_tweet_id => newest_tweet_id}, :upsert => true)
     end
 
     def get_next_batch!
