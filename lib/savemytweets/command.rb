@@ -40,6 +40,7 @@ module SaveMyTweets
       parser = Trollop::Parser.new do
         version "SaveMyTweets #{SaveMyTweets::VERSION}"
         banner "#{USAGE_STRING}\nOptions:"
+        opt :verbose, "Show download progress and output how many tweets were saved."
         opt :mongo_port, "The port your MongoDB instance is running on",
           :type => :int, :default => 27017
         opt :mongo_host, "The host your MongoDB instance is running on",
@@ -69,7 +70,7 @@ module SaveMyTweets
       begin 
         batch = get_next_batch!
         tweets += batch
-        puts "batch size: #{batch.length}"
+        puts "#{tweets.size} downloaded" if verbose?
       end until batch.size < @options[:count]
 
       tweets
@@ -104,6 +105,10 @@ module SaveMyTweets
         $stderr.puts "Error: Could not connect to mongo (#{@global_opts[:mongo_host]} on port #{@global_opts[:mongo_port]}). Have you started mongod?"
         exit(1)
       end
+    end
+
+    def verbose?
+      @global_opts[:verbose]
     end
   end
 end
